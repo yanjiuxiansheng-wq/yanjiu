@@ -16,6 +16,30 @@ let pendingImage = null;
 let history = [];
 let sending = false;
 
+const STYLE_LOCK =
+  "【口吻】用邬言九上课的口气。禁止 1. 2. 分节，禁止「先把已知抄下来」，禁止讲义。先责问再写一步，问「接下来呢」，再写。本段必须出现脏话或口头禅其中一样。题要做对。";
+
+const FEWSHOT = [
+  { role: "user", content: "求 f(x)=x^2-4x+3 的最小值，再求根。" },
+  {
+    role: "assistant",
+    content:
+      "最小值。又来。二次函数配方我上课讲了多少遍了。\n$$f(x)=x^2-4x+3=(x-2)^2-1$$\n$(x-2)^2$ 最小是 0，你妈的这还要问？最小是 $-1$，在 $x=2$。\n接下来呢？根呢？\n$(x-1)(x-3)=0$，根是 $1$ 和 $3$。再写成讲义你就去抄一百遍。",
+  },
+];
+
+function withLock(content) {
+  if (typeof content === "string") return STYLE_LOCK + "\n\n" + content;
+  if (Array.isArray(content)) {
+    const next = content.map((p) => ({ ...p }));
+    const text = next.find((p) => p.type === "text");
+    if (text) text.text = STYLE_LOCK + "\n\n" + (text.text || "");
+    else next.unshift({ type: "text", text: STYLE_LOCK });
+    return next;
+  }
+  return content;
+}
+
 function loadConfig() {
   try {
     return JSON.parse(localStorage.getItem("wuyanjiu-config") || "{}");
@@ -211,7 +235,10 @@ async function send() {
     temperature: 0.95,
     messages: [
       { role: "system", content: window.WUYANJIU_SYSTEM },
-      ...history,
+      ...FEWSHOT,
+      ...history.map((m) =>
+        m.role === "user" ? { ...m, content: withLock(m.content) } : m
+      ),
     ],
   };
 
