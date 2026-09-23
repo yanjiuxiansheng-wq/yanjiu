@@ -208,7 +208,7 @@ async function send() {
   const payload = {
     model: cfg.model,
     stream: true,
-    temperature: 0.7,
+    temperature: 0.95,
     messages: [
       { role: "system", content: window.WUYANJIU_SYSTEM },
       ...history,
