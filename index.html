@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>邬言九</title>
+  <link rel="icon" href="./avatar.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="rail">
+      <div class="portrait">
+        <img src="./avatar.png" alt="邬言九" />
+      </div>
+      <div class="identity">
+        <h1>邬言九</h1>
+        <p class="role">数学</p>
+      </div>
+      <p class="blurb">题目发过来。讲过的别再问第二遍。</p>
+      <div class="rail-actions">
+        <button type="button" id="btn-new" title="新对话">新对话</button>
+        <button type="button" id="btn-settings" title="接口设置">设置</button>
+      </div>
+      <p class="hint" id="api-hint">先填接口，否则我连骂你的机会都没有。</p>
+    </aside>
+
+    <main class="stage">
+      <header class="topbar">
+        <div class="top-who">
+          <img src="./avatar.png" alt="" />
+          <div>
+            <strong>邬言九</strong>
+            <span id="conn-status">未配置接口</span>
+          </div>
+        </div>
+        <div class="top-btns">
+          <button type="button" class="ghost" id="btn-new-m">新对话</button>
+          <button type="button" class="ghost" id="btn-settings-m">设置</button>
+        </div>
+      </header>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <form id="composer" class="composer" autocomplete="off">
+        <div id="preview-row" class="preview-row hidden">
+          <div class="preview-chip">
+            <img id="preview-img" alt="题目图片" />
+            <button type="button" id="btn-clear-img" aria-label="去掉图片">×</button>
+          </div>
+        </div>
+        <div class="input-row">
+          <label class="attach" title="上传题目照片">
+            <input id="file-input" type="file" accept="image/*" hidden />
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <circle cx="8.5" cy="10" r="1.4" />
+              <path d="M21 16l-5.2-5.2a2 2 0 0 0-2.8 0L4 20" />
+            </svg>
+          </label>
+          <textarea id="input" rows="1" placeholder="把题发过来。字写清楚。"></textarea>
+          <button type="submit" id="btn-send" aria-label="发送">发送</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <div id="overlay" class="overlay hidden">
+    <div class="sheet" role="dialog" aria-labelledby="sheet-title">
+      <h2 id="sheet-title">接口</h2>
+      <p class="sheet-note">本页在你浏览器里直接请求模型，密钥只存在本机。要能看图讲题，选带视觉的模型。</p>
+      <label>预设
+        <select id="preset">
+          <option value="openai">OpenAI</option>
+          <option value="xai">xAI Grok</option>
+          <option value="openrouter">OpenRouter</option>
+          <option value="siliconflow">硅基流动</option>
+          <option value="qwen">通义千问</option>
+          <option value="custom">自定义</option>
+        </select>
+      </label>
+      <label>Base URL
+        <input id="base-url" type="text" placeholder="https://api.openai.com/v1" />
+      </label>
+      <label>模型
+        <input id="model" type="text" placeholder="gpt-4o" />
+      </label>
+      <label>API Key
+        <input id="api-key" type="password" placeholder="sk-..." autocomplete="off" />
+      </label>
+      <div class="sheet-actions">
+        <button type="button" id="btn-cancel">取消</button>
+        <button type="button" id="btn-save" class="primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script src="./prompt.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
